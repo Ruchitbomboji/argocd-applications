@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: datastore-application-set
+  name: wordpress-mysql-set
   namespace: argocd
 spec:
   generators:
@@ -9,8 +9,7 @@ spec:
         repoURL: https://github.com/Ruchitbomboji/argocd-applications.git
         revision: main
         directories:
-          - path: datastore-be
-          - path: datastore-fe
+          - path: datastore-*
   template:
     metadata:
       name: '{{path.basename}}'
@@ -19,7 +18,7 @@ spec:
       source:
         repoURL: https://github.com/Ruchitbomboji/Kubernetes.git
         targetRevision: main
-        path: '{{path.path}}'
+        path: '{{path.basename}}'
       destination:
         server: https://kubernetes.default.svc
         namespace: default
