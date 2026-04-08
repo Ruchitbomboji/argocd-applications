@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: wordpress-mysql-set
+  name: datastore-application-set
   namespace: argocd
 spec:
   generators:
@@ -9,21 +9,21 @@ spec:
         repoURL: https://github.com/Ruchitbomboji/argocd-applications.git
         revision: main
         directories:
-          - path: datastore-be/datastore-be.yaml # Match the `mysql` directory directly
-          - path: datastore-fe/datastore-fe.yaml # Match the `wordpress` directory directly
+          - path: datastore-be
+          - path: datastore-fe
   template:
     metadata:
-      name: '{{path.basename}}' # Dynamically generated application name
+      name: '{{path.basename}}'
     spec:
-      project: default # ArgoCD project (make sure this project exists)
+      project: default
       source:
-        repoURL: https://github.com/Ruchitbomboji/Kubernetes.git # Kubernetes manifests repository
-        targetRevision: main # Git branch to track
-        path: '{{path.basename}}' # Dynamically point to subdirectory in Kubernetes.git
+        repoURL: https://github.com/Ruchitbomboji/Kubernetes.git
+        targetRevision: main
+        path: '{{path.path}}'
       destination:
-        server: https://kubernetes.default.svc # Use the in-cluster Kubernetes API URL
-        namespace: 'default' # '{{path.basename}}' # Use directory basename (e.g., `mysql`, `wordpress`) as namespace
+        server: https://kubernetes.default.svc
+        namespace: default
       syncPolicy:
         automated:
-          prune: true # Automatically delete resources not in Git repo
-          selfHeal: true # Automatically fix discrepancies
+          prune: true
+          selfHeal: true
