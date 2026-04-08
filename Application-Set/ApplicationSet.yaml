@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:
-  name: wordpress-mysql-set
+  name: datastore-application-set
   namespace: argocd
 spec:
   generators:
